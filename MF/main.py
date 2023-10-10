@@ -1,9 +1,9 @@
 import torch
 import pandas as pd
-import numpy as np
+# import numpy as np
 from torch.autograd import Variable
-from numpy.random import randint
-from sklearn import metrics
+# from numpy.random import randint
+# from sklearn import metrics
 
 trainData = pd.read_csv('ml100k.train.rating', header=None, names=['user', 'item', 'rate'], sep='\t')
 testData = pd.read_csv('ml100k.test.rating', header=None, names=['user', 'item', 'rate'], sep='\t')
