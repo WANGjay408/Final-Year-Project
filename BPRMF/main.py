@@ -1,6 +1,7 @@
 import torch
 import pandas as pd
-from torch.autograd import Variable
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+import math
 
 trainData = pd.read_csv('ml100k.train.rating', header=None, names=['user', 'item', 'rate'], sep='\t')
 testData = pd.read_csv('ml100k.test.rating', header=None, names=['user', 'item', 'rate'], sep='\t')
@@ -81,9 +82,20 @@ def getRanking():
 #         ranking.append((user_idx, item_idx, pred.item()))
 #
 #     return pd.DataFrame(ranking, columns=['user_idx', 'item_idx', 'pred'])
-
+def calculate_metrics(ranking):
+    testData_cleaned = testData.dropna()  # 清除包含NaN值的行
+    predicted_ratings = ranking['pred'].values
+    actual_ratings = testData_cleaned['rate'].values
+    mse = mean_squared_error(actual_ratings, predicted_ratings)
+    rmse = math.sqrt(mse)
+    mae = mean_absolute_error(actual_ratings, predicted_ratings)
+    return rmse, mae
 
 print('Testing')
 ranking = getRanking()
 print(ranking.head())
+
+rmse, mae = calculate_metrics(ranking)
+print('RMSE:', rmse)
+print('MAE:', mae)
 

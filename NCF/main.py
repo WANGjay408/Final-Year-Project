@@ -1,10 +1,11 @@
 import torch
 import pandas as pd
-import torch.nn as nn  # 引入 nn 模块
+import torch.nn as nn
 import numpy as np
 from torch.autograd import Variable
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, TensorDataset
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 # 数据加载和预处理
 trainData = pd.read_csv('ml100k.train.rating', header=None, names=['user', 'item', 'rate'], sep='\t')
@@ -101,3 +102,15 @@ def getRanking():
 print('Testing')
 ranking = getRanking()
 print(ranking.head())
+
+# 计算均方根误差（RMSE）和平均绝对误差（MAE）
+testData_cleaned = testData.dropna()
+predicted_ratings = ranking['pred'].values
+actual_ratings = testData_cleaned['rate'].values
+mse = mean_squared_error(actual_ratings, predicted_ratings)
+mae = mean_absolute_error(actual_ratings, predicted_ratings)
+rmse = np.sqrt(mse)
+
+print('RMSE:', rmse)
+print('MAE:', mae)
+
